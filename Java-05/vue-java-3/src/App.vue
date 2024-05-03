@@ -12,9 +12,17 @@ import Detyra3 from "@/components/Detyra3.vue";
 <!--    <VueStyling />-->
 <!--    <Detyra2 />-->
 
-<!--    <TodoList />-->
+    <TodoList>
+      <template #header>
+        <h2>Teksti ne header</h2>
+      </template>
+      <h1>Teksti i renderuar prej Slotit</h1>
+      <template #footer>
+        <h2>Teksti ne footer</h2>
+      </template>
+    </TodoList>
 
-    <Detyra3 />
+<!--    <Detyra3 />-->
   </div>
 </template>
 
