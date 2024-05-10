@@ -1,5 +1,6 @@
 <script setup>
 import LearningResources from "@/components/learning-resources/LearningResources.vue";
+import StoreSample from "@/components/StoreSample.vue";
 </script>
 
 <template>
@@ -7,6 +8,8 @@ import LearningResources from "@/components/learning-resources/LearningResources
 <!--    <learning-resources />-->
 
     <router-view />
+
+<!--    <store-sample/>-->
   </div>
 </template>
 

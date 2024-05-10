@@ -1,6 +1,7 @@
 <script setup>
 import AppCard from "@/components/AppCard.vue";
 import AppButton from "@/components/AppButton.vue";
+import {useResourceStore} from "@/stores/resource.store.js";
 
 defineProps({
   resource: {
@@ -9,7 +10,12 @@ defineProps({
   }
 })
 
-defineEmits(['deleteResource']);
+const store = useResourceStore();
+function deleteResource(id) {
+  if(confirm('Are you sure you want to delete this resource?')) {
+    store.deleteResource(id);
+  }
+}
 </script>
 
 <template>
@@ -23,10 +29,17 @@ defineEmits(['deleteResource']);
     </p>
 
     <a href="#" class="card-link">{{ resource.link }}</a>
-    <app-button class="btn-outline-danger ms-2"
-                @click="$emit('deleteResource', resource.id)">
-      Delete
-    </app-button>
+
+    <div class="text-end">
+      <router-link class="btn btn-outline-warning"
+                   :to="`/update/${resource.id}`">
+        Update
+      </router-link>
+      <app-button class="btn-outline-danger ms-2"
+                  @click="deleteResource(resource.id)">
+        Delete
+      </app-button>
+    </div>
 <!--    <a href="#" class="card-link">Another link</a>-->
   </app-card>
 </template>
