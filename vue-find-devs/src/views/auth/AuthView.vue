@@ -1,11 +1,13 @@
 <script setup>
 import {computed, reactive, ref} from "vue";
 import {useAuthStore} from "@/stores/auth.js";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import Swal from "sweetalert2";
 
 
 const authStore = useAuthStore();
 const {push} = useRouter();
+const route = useRoute();
 
 const mode = ref('login');
 function onChangeMode() {
@@ -51,10 +53,17 @@ const handleSubmit = async () => {
     if (mode.value === 'login') {
       // login
       await authStore.logIn(formData);
-      await push({name:'home'});
+      const redirectUrl = `${route.query.redirect || '/'}`
+      // console.log(redirectUrl)
+      await push(redirectUrl);
     } else {
       // signup
       await authStore.signUp(formData)
+      await Swal.fire({
+        title: "Signed up successfully, please login!",
+        icon: "success"
+      });
+      mode.value = 'login';
     }
   } catch (e) {
     formIsValid.value = false;

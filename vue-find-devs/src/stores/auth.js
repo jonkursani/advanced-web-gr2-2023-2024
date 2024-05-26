@@ -1,6 +1,7 @@
 import {defineStore} from "pinia";
 import client from "@/helpers/client.js";
 import {computed, ref} from "vue";
+import {jwtDecode} from "jwt-decode";
 
 export const useAuthStore = defineStore('auth', () => {
 
@@ -8,7 +9,7 @@ export const useAuthStore = defineStore('auth', () => {
     // https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[API_KEY]
     const url = 'https://identitytoolkit.googleapis.com/v1/accounts:';
     const apiKey = 'AIzaSyDBL_KiNP1IxnPisjRUpUgmtVzyvKbkn_E';
-    const user = ref(JSON.parse(localStorage.getItem('user')) || null);
+    const token = ref(localStorage.getItem('token') || null);
 
     async function signUp(user) {
         const response = await client.post(`${url}signUp?key=${apiKey}`, user);
@@ -17,17 +18,29 @@ export const useAuthStore = defineStore('auth', () => {
 
     async function logIn(user) {
         const response = await client.post(`${url}signInWithPassword?key=${apiKey}`, user);
-
-        if(response.data) {
-            localStorage.setItem('user', JSON.stringify(response.data));
+        // console.log(response)
+        if (response.data) {
+            localStorage.setItem('token', response.data.idToken);
+            token.value = response.data.idToken;
         }
         // console.log(response)
     }
 
+    function logOut() {
+        if (isLoggedIn.value) {
+            localStorage.removeItem('token');
+            token.value = null;
+        }
+    }
+
     // getters
     const loggedInUser = computed(() => {
-        return user.value;
+        return token.value ? jwtDecode(token.value) : null;
     })
 
-    return { signUp, logIn, loggedInUser }
+    const isLoggedIn = computed(() => {
+        return !!token.value;
+    })
+
+    return {signUp, logIn, loggedInUser, logOut, isLoggedIn}
 })
