@@ -3,8 +3,9 @@
 </script>
 
 <template>
-  <main>
-    <h1>Home page</h1>
-  </main>
+  <h1>Contact Dev</h1>
 </template>
 
+<style scoped>
+
+</style>
